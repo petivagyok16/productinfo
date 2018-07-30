@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"encoding/json"
 	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2018-04-01/compute"
 	"github.com/Azure/azure-sdk-for-go/services/preview/commerce/mgmt/2015-06-01-preview/commerce"
 	"github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2016-06-01/subscriptions"
@@ -15,6 +16,8 @@ import (
 	"github.com/Azure/go-autorest/autorest/azure/auth"
 	"github.com/banzaicloud/productinfo/pkg/productinfo"
 	log "github.com/sirupsen/logrus"
+	"io/ioutil"
+	"os"
 )
 
 const (
@@ -49,6 +52,20 @@ var (
 	mtStandardN, _ = regexp.Compile("^Standard_N[C|D|V]\\d+r?[_v\\d]*[_Promo]*$")
 )
 
+// authFile represents the authentication file
+type authFile struct {
+	ClientID                string `json:"clientId,omitempty"`
+	ClientSecret            string `json:"clientSecret,omitempty"`
+	SubscriptionID          string `json:"subscriptionId,omitempty"`
+	TenantID                string `json:"tenantId,omitempty"`
+	ActiveDirectoryEndpoint string `json:"activeDirectoryEndpointUrl,omitempty"`
+	ResourceManagerEndpoint string `json:"resourceManagerEndpointUrl,omitempty"`
+	GraphResourceID         string `json:"activeDirectoryGraphResourceId,omitempty"`
+	SQLManagementEndpoint   string `json:"sqlManagementEndpointUrl,omitempty"`
+	GalleryEndpoint         string `json:"galleryEndpointUrl,omitempty"`
+	ManagementEndpoint      string `json:"managementEndpointUrl,omitempty"`
+}
+
 // AzureInfoer encapsulates the data and operations needed to access external Azure resources
 type AzureInfoer struct {
 	subscriptionId      string
@@ -58,8 +75,18 @@ type AzureInfoer struct {
 }
 
 // NewAzureInfoer creates a new instance of the Azure infoer
-func NewAzureInfoer(subscriptionId string) (*AzureInfoer, error) {
+func NewAzureInfoer() (*AzureInfoer, error) {
 	authorizer, err := auth.NewAuthorizerFromFile(azure.PublicCloud.ResourceManagerEndpoint)
+	if err != nil {
+		return nil, err
+	}
+
+	contents, err := ioutil.ReadFile(os.Getenv("AZURE_AUTH_LOCATION"))
+	if err != nil {
+		return nil, err
+	}
+	file := authFile{}
+	err = json.Unmarshal(contents, &file)
 	if err != nil {
 		return nil, err
 	}
@@ -67,14 +94,14 @@ func NewAzureInfoer(subscriptionId string) (*AzureInfoer, error) {
 	sClient := subscriptions.NewClient()
 	sClient.Authorizer = authorizer
 
-	vmClient := compute.NewVirtualMachineSizesClient(subscriptionId)
+	vmClient := compute.NewVirtualMachineSizesClient(file.SubscriptionID)
 	vmClient.Authorizer = authorizer
 
-	rcClient := commerce.NewRateCardClient(subscriptionId)
+	rcClient := commerce.NewRateCardClient(file.SubscriptionID)
 	rcClient.Authorizer = authorizer
 
 	return &AzureInfoer{
-		subscriptionId:      subscriptionId,
+		subscriptionId:      file.SubscriptionID,
 		subscriptionsClient: sClient,
 		vmSizesClient:       vmClient,
 		rateCardClient:      rcClient,

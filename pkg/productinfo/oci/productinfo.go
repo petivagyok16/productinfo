@@ -290,3 +290,8 @@ func (i *Infoer) GetZones(region string) (zones []string, err error) {
 func (i *Infoer) HasShortLivedPriceInfo() bool {
 	return false
 }
+
+func (g *Infoer) GetServices(region string) ([]productinfo.ProductService, error) {
+	// todo implement it!
+	return nil, fmt.Errorf("not yet implemented")
+}

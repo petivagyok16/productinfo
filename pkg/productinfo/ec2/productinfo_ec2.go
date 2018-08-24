@@ -450,3 +450,26 @@ func (e *Ec2Infoer) GetNetworkPerformanceMapper() (productinfo.NetworkPerfMapper
 	nm := newEc2NetworkMapper()
 	return &nm, nil
 }
+
+func (e *Ec2Infoer) GetServices(region string) ([]productinfo.ProductService, error) {
+	return []productinfo.ProductService{newEc2ProductService("eks", []string{"images", "products"})}, nil
+
+}
+
+// Ec2ProductService represents a product service
+type Ec2ProductService struct {
+	Name         string   `json:"name"`
+	ResourceList []string `json:"resources"`
+}
+
+func (ec2ps Ec2ProductService) GetName() string {
+	return ec2ps.Name
+}
+
+func (ec2ps Ec2ProductService) GetResources() []string {
+	return ec2ps.ResourceList
+}
+
+func newEc2ProductService(name string, resources []string) Ec2ProductService {
+	return Ec2ProductService{Name: name, ResourceList: resources}
+}

@@ -63,6 +63,9 @@ type ProductInfoer interface {
 
 	// GetNetworkPerformanceMapper returns the provider specific network performance mapper
 	GetNetworkPerformanceMapper() (NetworkPerfMapper, error)
+
+	// GetServices returns the available services on the  given region
+	GetServices(region string) ([]ProductService, error)
 }
 
 // ProductInfo is the main entry point for retrieving vm type characteristics and pricing information on different cloud providers
@@ -96,6 +99,9 @@ type ProductInfo interface {
 
 	// GetNetworkPerfMapper retrieves the network performance mapper implementation
 	GetNetworkPerfMapper(provider string) (NetworkPerfMapper, error)
+
+	// GetServices retrieves the product services for the given provider
+	GetServices(provider string) ([]ProductService, error)
 }
 
 // CachingProductInfo is the module struct, holds configuration and cache
@@ -178,4 +184,9 @@ func newProductDetails(vm VmInfo) *ProductDetails {
 	pd.VmInfo = vm
 	pd.Burst = vm.IsBurst()
 	return &pd
+}
+
+type ProductService interface {
+	GetName() string
+	GetResources() []string
 }

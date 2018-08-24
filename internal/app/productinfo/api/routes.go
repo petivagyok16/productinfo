@@ -82,9 +82,17 @@ func (r *RouteHandler) ConfigureRoutes(router *gin.Engine) {
 		metaGroup.GET("/:provider/:region", r.getRegion).Use(ValidateRegionData(v))
 	}
 
+	// this is the new base path, all the other resources - with the registered middlewares should be moved in this group
 	providerGroup := v1.Group("/providers")
 	{
 		providerGroup.GET("/", r.getProviders)
+
+		// add the new service endpoints
+		///api/v1/providers/:provider/regions/:region/services
+		///api/v1/providers/:provider/regions/:region/services/:service
+		providerGroup.GET("/:provider/regions/:region/services", r.getServices)
+		providerGroup.GET("/:provider/regions/:region/services/:service", r.getService)
+
 	}
 
 }
@@ -231,4 +239,18 @@ func (r *RouteHandler) getProviders(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": http.StatusInternalServerError, "message": "no providers are configured"})
 	}
 	c.JSON(http.StatusOK, providers)
+}
+
+func (r *RouteHandler) getServices(c *gin.Context) {
+	provider := c.Param("provider")
+	region := c.Param("region")
+	services := r.prod.GetServices(provider, region)
+
+	c.JSON(http.StatusOK, services)
+}
+
+//todo Implement it!
+func (r *RouteHandler) getService(c *gin.Context) {
+	log.Error("not yet implemented")
+	c.JSON(http.StatusInternalServerError, "not yet implemented")
 }

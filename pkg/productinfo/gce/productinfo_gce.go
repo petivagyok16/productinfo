@@ -332,3 +332,8 @@ func (g *GceInfoer) GetCpuAttrName() string {
 func (g *GceInfoer) GetNetworkPerformanceMapper() (productinfo.NetworkPerfMapper, error) {
 	return newGceNetworkMapper(), nil
 }
+
+func (g *GceInfoer) GetServices(region string) ([]productinfo.ProductService, error) {
+	// todo implement it!
+	return nil, fmt.Errorf("not yet implemented")
+}

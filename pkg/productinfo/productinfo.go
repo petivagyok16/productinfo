@@ -4,13 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	log "github.com/sirupsen/logrus"
-	"strconv"
 )
 
 func (v AttrValues) floatValues() []float64 {
@@ -512,4 +512,10 @@ func (cpi *CachingProductInfo) GetStatus(provider string) (string, error) {
 
 func (cpi *CachingProductInfo) getStatusKey(provider string) string {
 	return fmt.Sprintf(StatusKeyTemplate, provider)
+}
+
+func (cpi *CachingProductInfo) GetServices(provider string, region string) []ProductService {
+	// todo handle the error
+	services, _ := cpi.productInfoers[provider].GetServices(region)
+	return services
 }

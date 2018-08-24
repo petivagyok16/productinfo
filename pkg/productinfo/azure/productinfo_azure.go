@@ -426,3 +426,8 @@ func (a *AzureInfoer) GetCpuAttrName() string {
 func (a *AzureInfoer) GetNetworkPerformanceMapper() (productinfo.NetworkPerfMapper, error) {
 	return newAzureNetworkMapper(), nil
 }
+
+func (g *AzureInfoer) GetServices(region string) ([]productinfo.ProductService, error) {
+	// todo implement it!
+	return nil, fmt.Errorf("not yet implemented")
+}

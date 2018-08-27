@@ -68,10 +68,13 @@ type ProductInfoer interface {
 	// GetServices returns the available services on the  given region
 	GetServices(region string) ([]ProductService, error)
 
+	// GetServiceImages retrieves the images supported by the given service in the given region
 	GetServiceImages(region, service string) ([]ImageDescriber, error)
 
+	// GetServiceProducts retrieves the products supported by the given service in the given region
 	GetServiceProducts(region, service string) ([]ProductDetails, error)
 
+	// GetServiceAttributes retrieves the attribute values supported by the given service in the given region for the given attribute
 	GetServiceAttributes(region, service, attribute string) (AttrValues, error)
 }
 

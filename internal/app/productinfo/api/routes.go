@@ -79,15 +79,14 @@ func (r *RouteHandler) ConfigureRoutes(router *gin.Engine) {
 	// this is the new base path, all the other resources - with the registered middlewares should be moved in this group
 	providerGroup := v1.Group("/providers")
 	{
+		providerGroup.Use(ValidatePathParam(providerParam, v, "provider"))
 		providerGroup.GET("/", r.getProviders)
 
-		// todo migrate existing endpoints to the "new" url scheme - don't forget the appropriate middlewares!
-		// provider and region related endpoints
-		///api/v1/providers/:provider
-		///api/v1/providers/:provider/regions
-		///api/v1/providers/:provider/regions/:region
-		///api/v1/providers/:provider/regions/:region/products
-		///api/v1/providers/:provider/regions/:region/products/:attribute
+		providerGroup.GET("/:provider/regions", r.getRegions)
+		providerGroup.GET("/:provider/regions/:region", r.getRegion).Use(ValidateRegionData(v))
+		providerGroup.GET("/:provider/regions/:region/products", r.getProductDetails)
+		providerGroup.GET("/:provider/regions/:region/products/:attribute", r.getAttrValues).
+			Use(ValidatePathParam(attributeParam, v, "attribute"))
 
 		// services related endpoints
 		providerGroup.GET("/:provider/regions/:region/services", r.getServices)

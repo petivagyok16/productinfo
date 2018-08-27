@@ -451,18 +451,22 @@ func (e *Ec2Infoer) GetNetworkPerformanceMapper() (productinfo.NetworkPerfMapper
 	return &nm, nil
 }
 
+// GetServices returns the available services on the  given region
 func (e *Ec2Infoer) GetServices(region string) ([]productinfo.ProductService, error) {
 	return []productinfo.ProductService{newEc2ProductService("eks", []string{"images", "products"})}, nil
 }
 
+// GetServiceImages retrieves the images supported by the given service in the given region
 func (e *Ec2Infoer) GetServiceImages(region, service string) ([]productinfo.ImageDescriber, error) {
-	return nil, fmt.Errorf("GetServiceProducts - not yet implemented")
-}
-
-func (e *Ec2Infoer) GetServiceProducts(region, service string) ([]productinfo.ProductDetails, error) {
 	return nil, fmt.Errorf("GetServiceImages - not yet implemented")
 }
 
+// GetServiceProducts retrieves the products supported by the given service in the given region
+func (e *Ec2Infoer) GetServiceProducts(region, service string) ([]productinfo.ProductDetails, error) {
+	return nil, fmt.Errorf("GetServiceProducts - not yet implemented")
+}
+
+// GetServiceAttributes retrieves the attribute values supported by the given service in the given region for the given attribute
 func (e *Ec2Infoer) GetServiceAttributes(region, service, attribute string) (productinfo.AttrValues, error) {
 	return nil, fmt.Errorf("GetServiceAttributes - not yet implemented")
 }
@@ -473,10 +477,12 @@ type Ec2ProductService struct {
 	ResourceList []string `json:"resources"`
 }
 
+// GetName returns the name of the service instance
 func (ec2ps Ec2ProductService) GetName() string {
 	return ec2ps.Name
 }
 
+// GetResources returns resource names under the service instance
 func (ec2ps Ec2ProductService) GetResources() []string {
 	return ec2ps.ResourceList
 }

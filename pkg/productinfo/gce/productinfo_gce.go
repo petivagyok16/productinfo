@@ -334,6 +334,17 @@ func (g *GceInfoer) GetNetworkPerformanceMapper() (productinfo.NetworkPerfMapper
 }
 
 func (g *GceInfoer) GetServices(region string) ([]productinfo.ProductService, error) {
-	// todo implement it!
-	return nil, fmt.Errorf("not yet implemented")
+	return nil, fmt.Errorf("GetServices - not yet implemented")
+}
+
+func (g *GceInfoer) GetServiceImages(region, service string) ([]productinfo.ImageDescriber, error) {
+	return nil, fmt.Errorf("GetServiceProducts - not yet implemented")
+}
+
+func (g *GceInfoer) GetServiceProducts(region, service string) ([]productinfo.ProductDetails, error) {
+	return nil, fmt.Errorf("GetServiceImages - not yet implemented")
+}
+
+func (g *GceInfoer) GetServiceAttributes(region, service, attribute string) (productinfo.AttrValues, error) {
+	return nil, fmt.Errorf("GetServiceAttributes - not yet implemented")
 }

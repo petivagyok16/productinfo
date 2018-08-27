@@ -91,11 +91,10 @@ func (r *RouteHandler) ConfigureRoutes(router *gin.Engine) {
 
 		// services related endpoints
 		providerGroup.GET("/:provider/regions/:region/services", r.getServices)
-		providerGroup.GET("/:provider/regions/:region/services/:service", r.getService)
+		providerGroup.GET("/:provider/regions/:region/services/:service", r.getService) // todo does this make sense?
 		providerGroup.GET("/:provider/regions/:region/services/:service/images", r.getServiceImages)
 		providerGroup.GET("/:provider/regions/:region/services/:service/products", r.getServiceProducts)
 		providerGroup.GET("/:provider/regions/:region/services/:service/products/:attribute", r.getServiceAttributes)
-
 	}
 
 }

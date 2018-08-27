@@ -455,6 +455,18 @@ func (e *Ec2Infoer) GetServices(region string) ([]productinfo.ProductService, er
 	return []productinfo.ProductService{newEc2ProductService("eks", []string{"images", "products"})}, nil
 }
 
+func (e *Ec2Infoer) GetServiceImages(region, service string) ([]productinfo.ImageDescriber, error) {
+	return nil, fmt.Errorf("GetServiceProducts - not yet implemented")
+}
+
+func (e *Ec2Infoer) GetServiceProducts(region, service string) ([]productinfo.ProductDetails, error) {
+	return nil, fmt.Errorf("GetServiceImages - not yet implemented")
+}
+
+func (e *Ec2Infoer) GetServiceAttributes(region, service, attribute string) (productinfo.AttrValues, error) {
+	return nil, fmt.Errorf("GetServiceAttributes - not yet implemented")
+}
+
 // Ec2ProductService represents a product service
 type Ec2ProductService struct {
 	Name         string   `json:"name"`

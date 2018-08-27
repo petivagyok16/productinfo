@@ -13,6 +13,15 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// CachingProductInfo is the module struct, holds configuration and cache
+// It's the entry point for the product info retrieval and management subsystem
+// It's also responsible for delegating to the cloud provider specific implementations
+type CachingProductInfo struct {
+	productInfoers  map[string]ProductInfoer
+	renewalInterval time.Duration
+	vmAttrStore     ProductStorer
+}
+
 func (v AttrValues) floatValues() []float64 {
 	floatValues := make([]float64, len(v))
 	for i, av := range v {
@@ -514,8 +523,12 @@ func (cpi *CachingProductInfo) getStatusKey(provider string) string {
 	return fmt.Sprintf(StatusKeyTemplate, provider)
 }
 
-func (cpi *CachingProductInfo) GetServices(provider string, region string) []ProductService {
-	// todo handle the error
-	services, _ := cpi.productInfoers[provider].GetServices(region)
-	return services
+// GetInfoer returns the provider specific infoer implementation. This method is the discriminator for cloud providers
+func (cpi *CachingProductInfo) GetInfoer(provider string) (ProductInfoer, error) {
+
+	if infoer, ok := cpi.productInfoers[provider]; ok {
+		return infoer, nil
+	}
+
+	return nil, fmt.Errorf("could not find infoer for: [ %s ]", provider)
 }

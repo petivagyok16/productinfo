@@ -291,7 +291,18 @@ func (i *Infoer) HasShortLivedPriceInfo() bool {
 	return false
 }
 
-func (g *Infoer) GetServices(region string) ([]productinfo.ProductService, error) {
-	// todo implement it!
-	return nil, fmt.Errorf("not yet implemented")
+func (i *Infoer) GetServices(region string) ([]productinfo.ProductService, error) {
+	return nil, fmt.Errorf("GetServiceProducts - not yet implemented")
+}
+
+func (i *Infoer) GetServiceImages(region, service string) ([]productinfo.ImageDescriber, error) {
+	return nil, fmt.Errorf("GetServiceProducts - not yet implemented")
+}
+
+func (i *Infoer) GetServiceProducts(region, service string) ([]productinfo.ProductDetails, error) {
+	return nil, fmt.Errorf("GetServiceImages - not yet implemented")
+}
+
+func (i *Infoer) GetServiceAttributes(region, service, attribute string) (productinfo.AttrValues, error) {
+	return nil, fmt.Errorf("GetServiceAttributes - not yet implemented")
 }

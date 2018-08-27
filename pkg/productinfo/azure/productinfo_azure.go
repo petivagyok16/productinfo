@@ -427,7 +427,19 @@ func (a *AzureInfoer) GetNetworkPerformanceMapper() (productinfo.NetworkPerfMapp
 	return newAzureNetworkMapper(), nil
 }
 
-func (g *AzureInfoer) GetServices(region string) ([]productinfo.ProductService, error) {
+func (a *AzureInfoer) GetServices(region string) ([]productinfo.ProductService, error) {
 	// todo implement it!
 	return nil, fmt.Errorf("not yet implemented")
+}
+
+func (a *AzureInfoer) GetServiceImages(region, service string) ([]productinfo.ImageDescriber, error) {
+	return nil, fmt.Errorf("GetServiceProducts - not yet implemented")
+}
+
+func (a *AzureInfoer) GetServiceProducts(region, service string) ([]productinfo.ProductDetails, error) {
+	return nil, fmt.Errorf("GetServiceImages - not yet implemented")
+}
+
+func (a *AzureInfoer) GetServiceAttributes(region, service, attribute string) (productinfo.AttrValues, error) {
+	return nil, fmt.Errorf("GetServiceAttributes - not yet implemented")
 }

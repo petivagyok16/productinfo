@@ -14,12 +14,6 @@ import (
 	"gopkg.in/go-playground/validator.v8"
 )
 
-const (
-	providerParam  = "provider"
-	regionParam    = "region"
-	attributeParam = "attribute"
-)
-
 // RouteHandler configures the REST API routes in the gin router
 type RouteHandler struct {
 	prod *productinfo.CachingProductInfo
@@ -87,11 +81,20 @@ func (r *RouteHandler) ConfigureRoutes(router *gin.Engine) {
 	{
 		providerGroup.GET("/", r.getProviders)
 
-		// add the new service endpoints
-		///api/v1/providers/:provider/regions/:region/services
-		///api/v1/providers/:provider/regions/:region/services/:service
+		// todo migrate existing endpoints to the "new" url scheme - don't forget the appropriate middlewares!
+		// provider and region related endpoints
+		///api/v1/providers/:provider
+		///api/v1/providers/:provider/regions
+		///api/v1/providers/:provider/regions/:region
+		///api/v1/providers/:provider/regions/:region/products
+		///api/v1/providers/:provider/regions/:region/products/:attribute
+
+		// services related endpoints
 		providerGroup.GET("/:provider/regions/:region/services", r.getServices)
 		providerGroup.GET("/:provider/regions/:region/services/:service", r.getService)
+		providerGroup.GET("/:provider/regions/:region/services/:service/images", r.getServiceImages)
+		providerGroup.GET("/:provider/regions/:region/services/:service/products", r.getServiceProducts)
+		providerGroup.GET("/:provider/regions/:region/services/:service/products/:attribute", r.getServiceAttributes)
 
 	}
 
@@ -239,18 +242,4 @@ func (r *RouteHandler) getProviders(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": http.StatusInternalServerError, "message": "no providers are configured"})
 	}
 	c.JSON(http.StatusOK, providers)
-}
-
-func (r *RouteHandler) getServices(c *gin.Context) {
-	provider := c.Param("provider")
-	region := c.Param("region")
-	services := r.prod.GetServices(provider, region)
-
-	c.JSON(http.StatusOK, services)
-}
-
-//todo Implement it!
-func (r *RouteHandler) getService(c *gin.Context) {
-	log.Error("not yet implemented")
-	c.JSON(http.StatusInternalServerError, "not yet implemented")
 }

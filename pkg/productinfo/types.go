@@ -186,7 +186,11 @@ func newProductDetails(vm VmInfo) *ProductDetails {
 	return &pd
 }
 
+// ProductService represents a service; eg.: oke, eks
 type ProductService interface {
+	// GetName abstracts the name assembly for the service
 	GetName() string
-	GetResources() []string
+
+	// GetResources returns a slice with the resources available for the given service
+	GetResources() []string // todo is this required?
 }

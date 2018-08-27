@@ -453,7 +453,6 @@ func (e *Ec2Infoer) GetNetworkPerformanceMapper() (productinfo.NetworkPerfMapper
 
 func (e *Ec2Infoer) GetServices(region string) ([]productinfo.ProductService, error) {
 	return []productinfo.ProductService{newEc2ProductService("eks", []string{"images", "products"})}, nil
-
 }
 
 // Ec2ProductService represents a product service

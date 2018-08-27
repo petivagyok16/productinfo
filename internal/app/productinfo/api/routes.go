@@ -61,21 +61,6 @@ func (r *RouteHandler) ConfigureRoutes(router *gin.Engine) {
 
 	v1 := base.Group("/api/v1")
 
-	piGroup := v1.Group("/products")
-	{
-		piGroup.Use(ValidatePathParam(providerParam, v, "provider"))
-		piGroup.Use(ValidateRegionData(v))
-		piGroup.GET("/:provider/:region/", r.getProductDetails)
-		piGroup.GET("/:provider/:region/:attribute", r.getAttrValues).Use(ValidatePathParam(attributeParam, v, "attribute"))
-	}
-
-	metaGroup := v1.Group("/regions")
-	{
-		metaGroup.Use(ValidatePathParam(providerParam, v, "provider"))
-		metaGroup.GET("/:provider", r.getRegions)
-		metaGroup.GET("/:provider/:region", r.getRegion).Use(ValidateRegionData(v))
-	}
-
 	// this is the new base path, all the other resources - with the registered middlewares should be moved in this group
 	providerGroup := v1.Group("/providers")
 	{
